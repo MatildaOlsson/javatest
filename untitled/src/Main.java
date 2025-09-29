@@ -5,8 +5,8 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello! You need to get out of here as soon as possible!! Look around... as you can see this room is full of useful tools, that hopefullt can help you get out of here");
-        System.out.println("Don't waste any time! Look around and try to figure a way out");
+//        System.out.println("Hello! You need to get out of here as soon as possible!! Look around... as you can see this room is full of useful tools, that hopefullt can help you get out of here");
+//        System.out.println("Don't waste any time! Look around and try to figure a way out");
 
 
 
@@ -52,9 +52,8 @@ public class Main {
         // kanske snyggare att skriva in föremålets namn när man gör valet?
         // Listan kan innehålla förmål med samma "genus" för att undvika språkliga svårigheter
 
-        // kanske fält istället för arraylist?
-
         // Undvika att förlora föremål.. dvs "tappa" föremål när de läggs i lista..
+        // Kankse bäst att skapa en arraylist som innehåller Obejekt och inte ensaka varibaler.
 
         System.out.println("Du plockar upp " + tools.get(val1));
         // pLacerar föremålet i "hand-listan"

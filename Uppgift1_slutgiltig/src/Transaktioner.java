@@ -52,3 +52,4 @@ public class Transaktioner {
         return date;
     }
 }
+
