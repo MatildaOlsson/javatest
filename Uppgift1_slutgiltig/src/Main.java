@@ -320,7 +320,7 @@ public class Main {
             totalExpense += transaktionExpenses.get(i).getSum();
         }
         System.out.println("Dina totala utgifter: " + totalExpense);
-        accountBalance = totalIncome - totalExpense;
+        accountBalance = totalIncome + totalExpense;
         System.out.println("Din nuvarande kontobalans är: " + accountBalance + " SEK");
         return accountBalance;
     }

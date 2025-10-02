@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Application {
@@ -34,10 +35,41 @@ public class Application {
                     RegisterTransactionCommand.executeRegistration(user.transactionExpense, "expense");
                     break;
                 case 3:
+                    ManageTransactionCommand.deleteTransaction(user.transactionIncome, user.transactionExpense);
+                    break;
+                case 4:
+                    ManageTransactionCommand.getCurrentAccountBalance(user.transactionIncome, user.transactionExpense);
+                    break;
+                case 5:
+                    transactionHistoryChoice(user.transactionIncome);
+                case 6:
+                    transactionHistoryChoice(user.transactionExpense);
+            }
+        }
+    }
 
+    public static void transactionHistoryChoice(ArrayList<Transaktioner> transactions){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Make one of following choice to filter transaction history:");
+        System.out.println(" 1. Year \n 2. Month \n 3. Day \n 4. Week");
+        int choice = scan.nextInt();
+        try {
+            choice = scan.nextInt();
+        }
+        catch (InputMismatchException e) {
+            System.out.println("Invalid choice");
+        }
+        switch (choice) {
+            case 1:
+               ViewHistoryCommand.printYearHistory(transactions);
+               break;
+            case 2:
+               ViewHistoryCommand.printMonthHistory(transactions);
+               break;
+            case 3:
 
-                }
 
         }
     }
+
 }

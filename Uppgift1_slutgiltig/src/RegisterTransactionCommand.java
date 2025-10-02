@@ -6,8 +6,13 @@ import java.util.Scanner;
 public class RegisterTransactionCommand {
     public static void executeRegistration(ArrayList<Transaktioner> transactionList, String typeOfTransaction) {
         Scanner input = new Scanner(System.in);
+        int transaction = 0;
         System.out.println("Pleas enter your " + typeOfTransaction + ":");
-        int transaction = input.nextInt();
+        if (typeOfTransaction.equals("expense")) {
+            transaction = input.nextInt() * -1;
+        } else if (typeOfTransaction.equals("income")) {
+            transaction = input.nextInt();
+        }
         System.out.println("Do you want to add the transaction on current day? (Yes/No)");
         Scanner scan = new Scanner(System.in); //Behövde skapa en ny scanner då jag "blandar" datatyper (verkar det som)?
         String choice = scan.nextLine();
@@ -17,31 +22,35 @@ public class RegisterTransactionCommand {
 
         if (choice.contains("n")) {
             try {
-            System.out.println("Enter the year of the transaction (yyyy)");
-            yearValue = input.nextInt();
-            System.out.println("Enter the month of the transaction (mm)"); //TODO Lägga in en Enumb klass här för att minska risken för fel input
-            monthValue = input.nextInt();
-            System.out.println("Enter the day of the transaction (dd)");
-            dayValue = input.nextInt(); }
-            catch (InputMismatchException e) {
+                System.out.println("Enter the year of the transaction (yyyy)");
+                yearValue = input.nextInt();
+                System.out.println("Enter the month of the transaction (mm)"); //TODO Lägga in en Enumb klass här för att minska risken för fel input
+                monthValue = input.nextInt();
+                System.out.println("Enter the day of the transaction (dd)");
+                dayValue = input.nextInt();
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please try again with an integer ");
             }
             int weekValue = weekOfDate2025(monthValue, dayValue);
             Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
-            System.out.println("Din transaktion: " + transaktion.getSum());
+            System.out.println("Your transaction: " + transaktion.getSum()); //TODO Ta bort senare denna rad
             transactionList.add(transaktion);
-            System.out.println("Din transaktion sparas på datum: " + yearValue + "-" + monthValue + "-" + dayValue);
+            System.out.println("Your transaction will be added on: " + yearValue + "-" + monthValue + "-" + dayValue);
         } else {
             LocalDate today = LocalDate.now();
+            int weekValue = 0;
             monthValue = today.getMonthValue();
             yearValue = today.getYear();
             dayValue = today.getDayOfMonth();
-            int weekValue = weekOfDate2025(monthValue, dayValue);
-            Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
-            transactionList.add(transaktion);
-            System.out.println("Din transaktion sparas på datum: " + today);
+            if (yearValue == 2025) {
+                weekValue = weekOfDate2025(monthValue, dayValue);
+            }
+                Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
+                transactionList.add(transaktion);
+                System.out.println("Your transaction will be added on:  " + today);
+            }
         }
-    }
+
 
     public static Integer weekOfDate2025(int monthValue, int dayValue) {
         //Skapar en array med 13 platser där alla månaders dagar hårdkodas
