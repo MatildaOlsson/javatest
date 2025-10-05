@@ -63,17 +63,16 @@ public class Application {
         int choice = scan.nextInt();
         try {
             choice = scan.nextInt();
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Invalid choice");
         }
         switch (choice) {
             case 1:
-               ViewHistoryCommand.printYearHistory(transactions, currencyInput);
-               break;
+                ViewHistoryCommand.printYearHistory(transactions, currencyInput);
+                break;
             case 2:
-               ViewHistoryCommand.printMonthHistory(transactions, currencyInput);
-               break;
+                ViewHistoryCommand.printMonthHistory(transactions, currencyInput);
+                break;
             case 3:
                 ViewHistoryCommand.printDayHistory(transactions, currencyInput);
                 break;

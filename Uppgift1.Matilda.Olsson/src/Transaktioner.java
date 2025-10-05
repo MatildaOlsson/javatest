@@ -5,8 +5,6 @@ public class Transaktioner {
     int month;
     int year;
 
-    //Bör jag kanske lägga in "meddelande" som en variabel
-
     public Transaktioner(double sum, int week, int day, int month, int year) {
         this.sum = sum;
         this.week = week;
@@ -15,7 +13,7 @@ public class Transaktioner {
         this.year = year;
     }
 
-    public String toString () {
+    public String toString() {
         return sum + " " + week + " " + day + " " + month + " " + year;
     }
 
@@ -26,12 +24,15 @@ public class Transaktioner {
     public int getDay() {
         return day;
     }
+
     public int getMonth() {
         return month;
     }
+
     public int getYear() {
         return year;
     }
+
     public int getWeek() {
         return week;
     }
@@ -55,7 +56,4 @@ public class Transaktioner {
 
         return date;
     }
-
-
 }
-

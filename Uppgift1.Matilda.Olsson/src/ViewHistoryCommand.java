@@ -10,8 +10,7 @@ public class ViewHistoryCommand {
         System.out.println("Type the year you want history (format yyyy): ");
         try {
             choiceYear = input.nextInt();
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again with an integer representing a year");
         }
         boolean notEmpty = false;
@@ -63,8 +62,7 @@ public class ViewHistoryCommand {
             choiceMonth = input.nextInt();
             System.out.println("Type the day you want history (format dd): ");
             choiceDay = input.nextInt();
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again with an integer");
         }
         boolean notEmpty = false;
@@ -82,14 +80,13 @@ public class ViewHistoryCommand {
     public static void printWeekHistory(ArrayList<Transaktioner> transaktioner, String currencyInput) {
         Scanner input = new Scanner(System.in);
         int choiceYear = 0;
-        int choiceWeek= 0;
+        int choiceWeek = 0;
         try {
             System.out.println("Type the year you want history (format yyyy): ");
             choiceYear = input.nextInt();
             System.out.println("Type the week you want history: ");
             choiceWeek = input.nextInt();
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again with an integer representing year");
         }
         if (choiceYear != 2025) {
@@ -97,14 +94,14 @@ public class ViewHistoryCommand {
         }
         boolean notEmpty = false;
 
-            for (int i = 0; i < transaktioner.size(); i++) {
-                if (choiceWeek == transaktioner.get(i).week) {
-                    System.out.println("Year 2025, Week " + choiceWeek + ": " + transaktioner.get(i).getSum() + " " + currencyInput);
-                    notEmpty = true;
-                }
+        for (int i = 0; i < transaktioner.size(); i++) {
+            if (choiceWeek == transaktioner.get(i).week) {
+                System.out.println("Year 2025, Week " + choiceWeek + ": " + transaktioner.get(i).getSum() + " " + currencyInput);
+                notEmpty = true;
             }
-            if (!notEmpty) {
-                System.out.println("History from that week not found");
+        }
+        if (!notEmpty) {
+            System.out.println("History from that week not found");
         }
 
 

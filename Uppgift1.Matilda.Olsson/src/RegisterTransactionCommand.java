@@ -15,8 +15,7 @@ public class RegisterTransactionCommand {
             } else if (typeOfTransaction.equals("income")) {
                 transaction = scanner.nextDouble();
             }
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Please enter a number. If your number have an decimal, please use this ',' symbol"); // Detta tyckte jag blev lite skumt, brukar det inte vanligtvis vara '.' som man använder för att mata in double?
             return;
         }
@@ -43,13 +42,12 @@ public class RegisterTransactionCommand {
                 day = getStringFormatOfDayOrMonth(dayValue);
                 weekValue = weekOfDate2025(monthValue, dayValue);
 
-            }
-            catch (InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please try again with numbers representing year, month and day. ");
             }
             Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
             transactionList.add(transaktion);
-            System.out.println("Your transaction " + transaktion.getSum()+ " " + currencyInput + " will be added on: " + yearValue + "-" + month + "-" + day);
+            System.out.println("Your transaction " + transaktion.getSum() + " " + currencyInput + " will be added on: " + yearValue + "-" + month + "-" + day);
         } else {
             LocalDate today = LocalDate.now();
             weekValue = 0;
@@ -61,9 +59,9 @@ public class RegisterTransactionCommand {
             }
             Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
             transactionList.add(transaktion);
-            System.out.println("Your transaction " + transaktion.getSum()+ " " + currencyInput + " will be added on: " + today);
-            }
+            System.out.println("Your transaction " + transaktion.getSum() + " " + currencyInput + " will be added on: " + today);
         }
+    }
 
 
     public static Integer weekOfDate2025(int monthValue, int dayValue) {
@@ -111,8 +109,7 @@ public class RegisterTransactionCommand {
         String dayOrMonthValueString;
         if (dayOrMonthValue < 10 && dayOrMonthValue > 0) {
             dayOrMonthValueString = "0" + dayOrMonthValue;
-        }
-        else {
+        } else {
             dayOrMonthValueString = "" + dayOrMonthValue;
         }
         return dayOrMonthValueString;
