@@ -4,50 +4,64 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class RegisterTransactionCommand {
-    public static void executeRegistration(ArrayList<Transaktioner> transactionList, String typeOfTransaction) {
-        Scanner input = new Scanner(System.in);
-        int transaction = 0;
-        System.out.println("Pleas enter your " + typeOfTransaction + ":");
-        if (typeOfTransaction.equals("expense")) {
-            transaction = input.nextInt() * -1;
-        } else if (typeOfTransaction.equals("income")) {
-            transaction = input.nextInt();
+    public static void executeRegistration(ArrayList<Transaktioner> transactionList, String typeOfTransaction, String currencyInput) {
+        Scanner scanner = new Scanner(System.in);
+        double transaction = 0.0;
+        System.out.println("Please enter your " + typeOfTransaction + ":");
+
+        try {
+            if (typeOfTransaction.equals("expense")) {
+                transaction = scanner.nextDouble() * -1;
+            } else if (typeOfTransaction.equals("income")) {
+                transaction = scanner.nextDouble();
+            }
+        }
+        catch (InputMismatchException e) {
+            System.out.println("Please enter a number. If your number have an decimal, please use this ',' symbol"); // Detta tyckte jag blev lite skumt, brukar det inte vanligtvis vara '.' som man använder för att mata in double?
+            return;
         }
         System.out.println("Do you want to add the transaction on current day? (Yes/No)");
         Scanner scan = new Scanner(System.in); //Behövde skapa en ny scanner då jag "blandar" datatyper (verkar det som)?
         String choice = scan.nextLine();
         int yearValue = 0;
         int monthValue = 0;
+        String month = ""; //Lägger månaderna och dagarna som både String och Integers, då Integers behövs för veckouträckningen längre ner och String för att få formatet "dd" och "mm".
         int dayValue = 0;
+        String day = "";
+        int weekValue = weekOfDate2025(monthValue, dayValue);
 
         if (choice.contains("n")) {
             try {
+                Scanner input = new Scanner(System.in);
                 System.out.println("Enter the year of the transaction (yyyy)");
                 yearValue = input.nextInt();
-                System.out.println("Enter the month of the transaction (mm)"); //TODO Lägga in en Enumb klass här för att minska risken för fel input
+                System.out.println("Enter the month of the transaction (mm)");
                 monthValue = input.nextInt();
+                month = getStringFormatOfDayOrMonth(monthValue);
                 System.out.println("Enter the day of the transaction (dd)");
                 dayValue = input.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please try again with an integer ");
+                day = getStringFormatOfDayOrMonth(dayValue);
+                weekValue = weekOfDate2025(monthValue, dayValue);
+
             }
-            int weekValue = weekOfDate2025(monthValue, dayValue);
+            catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please try again with numbers representing year, month and day. ");
+            }
             Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
-            System.out.println("Your transaction: " + transaktion.getSum()); //TODO Ta bort senare denna rad
             transactionList.add(transaktion);
-            System.out.println("Your transaction will be added on: " + yearValue + "-" + monthValue + "-" + dayValue);
+            System.out.println("Your transaction " + transaktion.getSum()+ " " + currencyInput + " will be added on: " + yearValue + "-" + month + "-" + day);
         } else {
             LocalDate today = LocalDate.now();
-            int weekValue = 0;
+            weekValue = 0;
             monthValue = today.getMonthValue();
             yearValue = today.getYear();
             dayValue = today.getDayOfMonth();
             if (yearValue == 2025) {
                 weekValue = weekOfDate2025(monthValue, dayValue);
             }
-                Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
-                transactionList.add(transaktion);
-                System.out.println("Your transaction will be added on:  " + today);
+            Transaktioner transaktion = new Transaktioner(transaction, weekValue, dayValue, monthValue, yearValue);
+            transactionList.add(transaktion);
+            System.out.println("Your transaction " + transaktion.getSum()+ " " + currencyInput + " will be added on: " + today);
             }
         }
 
@@ -55,7 +69,7 @@ public class RegisterTransactionCommand {
     public static Integer weekOfDate2025(int monthValue, int dayValue) {
         //Skapar en array med 13 platser där alla månaders dagar hårdkodas
         int[] dayOfMonth = new int[13];
-        dayOfMonth[0] = 0;  //justera index för att matcha månadsnummer
+        dayOfMonth[0] = 0;  //justerar index för att matcha månadsnummer
         dayOfMonth[1] = 25; //januari (från den 6e januari)
         dayOfMonth[2] = 28; //februari
         dayOfMonth[3] = 31;
@@ -90,11 +104,21 @@ public class RegisterTransactionCommand {
             double sub = (totalDaysBeforeMonth + dayValue + 4) / 7;
             week = (int) Math.round(sub) + 1;
         }
-        // System.out.println("Vecka: " + week);
         return week;
     }
 
+    public static String getStringFormatOfDayOrMonth(int dayOrMonthValue) {
+        String dayOrMonthValueString;
+        if (dayOrMonthValue < 10 && dayOrMonthValue > 0) {
+            dayOrMonthValueString = "0" + dayOrMonthValue;
+        }
+        else {
+            dayOrMonthValueString = "" + dayOrMonthValue;
+        }
+        return dayOrMonthValueString;
     }
+
+}
 
 
 
