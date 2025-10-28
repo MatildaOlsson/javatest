@@ -115,6 +115,10 @@ public class RegisterTransactionCommand {
         return dayOrMonthValueString;
     }
 
+    public static int getIntegerFormatOfString(String value) {
+      return Integer.parseInt(value);
+    }
+
 }
 
 

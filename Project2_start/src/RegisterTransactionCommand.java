@@ -1,69 +1,74 @@
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.concurrent.TransferQueue;
 
 public class RegisterTransactionCommand extends Command {
+    protected ArrayList<Transactions> transactionList;
     protected double sum;
-    protected ArrayList<Transactions> transactionList = new ArrayList<>();
     protected String type;
     protected String currency;
 
     LocalDate today = LocalDate.now();
-    protected int day;
-    protected int month;
-    protected int year;
-    protected int week = 0;
+    protected int day = today.getDayOfMonth();
+    protected int month = today.getMonthValue();
+    protected int year = today.getYear();
+    protected String week;
 
-    public RegisterTransactionCommand(String name, String type, String currency, double sum, int day, int month, int year, int week, ArrayList<Transactions> transactionlist) {
+    public RegisterTransactionCommand(String name, String type, String currency, double sum, ArrayList<Transactions> transactionlist) {
         super(name);
         this.type = type;
         this.sum = sum;
         this.currency = currency;
-        this.day = today.getDayOfMonth();
-        this.month = today.getMonthValue();
-        this.year = today.getYear();
-
-        if (year == 2025) {
-            this.week = weekOfDate2025(month, day);
-        }
+        this.transactionList = transactionlist;
     }
 
     @Override
     public void execute() {
-        registerTransaction(type);
+        sum = registerSum(type);
+        saveTransactionToArrayList(sum); // Dessa bör kanske bakas ihop??
     }
 
-    protected void registerTransaction(String type) {
-        System.out.println("Please enter your " + type +":");
+    protected double registerSum(String type) {
+        System.out.println("Please enter your " + type + ":");
         if (type.equals("income")) {
             sum = Main.input.nextDouble();
-        }
-        else if (type.equals("expense")) {
+        } else if (type.equals("expense")) {
             sum = Main.input.nextDouble() * -1;
         }
-
-        Main.input.nextLine();
-        System.out.println("Do you want to add the transaction on today's date?");
-        String choice = Main.input.nextLine();
-
-        if (choice.contains("n")) {
-            Transactions transactions = setOwnDateOnTransaction();
-            transactions.setSum(sum);
-            printTransaction(transactions);
-            transactionList.add(transactions);
-        }
-        else {
-            Transactions transactions = new Transactions(sum, type, currency, year, month, day, week);
-            printTransaction(transactions);
-            transactionList.add(transactions);
-        }
-
+        return sum;
     }
 
+    protected void saveTransactionToArrayList(double sum){
+            Main.input.nextLine();
+            System.out.println("Do you want to add the transaction on today's date?");
+            String choice = Main.input.nextLine();
+
+            if (choice.contains("n")) {
+                Transactions transactions = setOwnDateOnTransaction();
+                transactions.setSum(sum);
+                printTransaction(transactions);
+                transactionList.add(transactions);
+            } else {
+                String monthString = getStringFormatOfDateValue(month);
+                String dayString = getStringFormatOfDateValue(day);
+
+                if (year == 2025) {
+                    week = weekOfDate2025(month, day);
+                }
+                else {
+                    week = "Not available";
+                }
+                Transactions transactions = new Transactions(sum, type, currency, year, monthString, dayString, week);
+                printTransaction(transactions);
+                transactionList.add(transactions);
+            }
+        }
+
     protected Transactions setOwnDateOnTransaction() {
-        System.out.println("Type year,format xxxx"); //TODO Lösning för veckor behövs nog
+        System.out.println("Type year, format xxxx");
         year = Main.input.nextInt();
-        System.out.println("Type month, format mm"); //TODO sätta datum som Strings? Metod för det?
+        System.out.println("Type month, format mm"); //TODO Lägga till try catches för felhantering
         month = Main.input.nextInt();
         System.out.println("Type day, format dd");
         day = Main.input.nextInt();
@@ -71,16 +76,34 @@ public class RegisterTransactionCommand extends Command {
         if (year == 2025) {
             week = weekOfDate2025(month, day);
         }
+        else {
+            week = "Not available";
+        }
 
-        return new Transactions(0, type, currency, year, month, day, week);
+        String monthString = getStringFormatOfDateValue(month);
+        String dayString = getStringFormatOfDateValue(day);
+
+        return new Transactions(0, type, currency, year, monthString, dayString, week);
     }
 
-    public void printTransaction(Transactions transactions) {
-        System.out.println("Your transaction " + sum +  " will be saved on " +year+"-"+month+"-"+day);
+    protected void printTransaction(Transactions transactions) {
+        String dayString = getStringFormatOfDateValue(day);
+        String monthString = getStringFormatOfDateValue(month);
+
+        System.out.println("Your transaction " + sum + " " + currency + " will be saved on " +year+"-"+monthString+"-"+dayString);
     }
 
+    protected static String getStringFormatOfDateValue(int dayMonthOrWeekValue) {
+        String stringedValue;
+        if (dayMonthOrWeekValue < 10 && dayMonthOrWeekValue > 0) {
+            stringedValue = "0" + dayMonthOrWeekValue;
+        } else {
+            stringedValue = "" + dayMonthOrWeekValue;
+        }
+        return stringedValue;
+    }
 
-    private int weekOfDate2025(int monthValue, int dayValue) {
+    private String weekOfDate2025(int monthValue, int dayValue) {
         //Skapar en array med 13 platser där alla månaders dagar hårdkodas
         int[] dayOfMonth = new int[13];
         dayOfMonth[0] = 0;  //justerar index för att matcha månadsnummer
@@ -118,6 +141,9 @@ public class RegisterTransactionCommand extends Command {
             double sub = (totalDaysBeforeMonth + dayValue + 4) / 7;
             week = (int) Math.round(sub) + 1;
         }
-        return week;
+
+        return getStringFormatOfDateValue(week);
+
     }
+
 }
