@@ -61,6 +61,9 @@ public class Transactions {
     public UUID getId() {
         return id;
     }
+    public String getCurrency() {
+        return currency;
+    }
 
     @Override
     public String toString() {

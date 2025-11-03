@@ -1,9 +1,13 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Comparator;
 import java.util.List;
 
 public class FilterHistoryCommand extends ViewHistoryCommand {
+    int choice = 0;
+    int year;
+    String month;
+    String day;
+    String week;
 
     FilterHistoryCommand(String name, ArrayList<Transactions> transactionList) {
         super(name, transactionList);
@@ -18,7 +22,12 @@ public class FilterHistoryCommand extends ViewHistoryCommand {
         System.out.println("3. Day");
         System.out.println("4. Week");
 
-        int choice = 0;
+//        int choice = 0;
+//        int year;
+//        String month;
+//        String day;
+//        String week;
+
         try {
             choice = Main.input.nextInt();
             Main.input.nextLine();
@@ -28,29 +37,29 @@ public class FilterHistoryCommand extends ViewHistoryCommand {
 
         switch (choice) {
             case 1:
-                int year = SelectHistoryYear();
+                year = SelectYear();
                 streamAndFilter(transactionList, year, null, null, null);
                 break;
             case 2:
-                year = SelectHistoryYear();
-                String month = SelectHistoryDayMonthOrWeek("month");
+                year = SelectYear();
+                month = SelectDayMonthOrWeek("month");
                 streamAndFilter(transactionList, year, month, null, null);
                 break;
             case 3:
-                year = SelectHistoryYear();
-                month = SelectHistoryDayMonthOrWeek("month");
-                String day = SelectHistoryDayMonthOrWeek("day");
+                year = SelectYear();
+                month = SelectDayMonthOrWeek("month");
+                day = SelectDayMonthOrWeek("day");
                 streamAndFilter(transactionList, year, month, day, null);
                 break;
             case 4:
-               String week = SelectHistoryDayMonthOrWeek("week");
+               week = SelectDayMonthOrWeek("week");
                streamAndFilter(transactionList, 2025, null, null, week);
                 break;
         }
 
     }
 
-    private int SelectHistoryYear() {
+   public static int SelectYear() {
         System.out.println("Type the year you want history (format yyyy): ");
         int year;
         try {
@@ -62,7 +71,7 @@ public class FilterHistoryCommand extends ViewHistoryCommand {
         return year;
     }
 
-    private String SelectHistoryDayMonthOrWeek(String type) {
+    public static String SelectDayMonthOrWeek(String type) {
         System.out.println("Type the " + type + " you want history:");
         String value;
         try {
@@ -83,7 +92,7 @@ public class FilterHistoryCommand extends ViewHistoryCommand {
                 .toList();
 
         if (matchingTransactions.isEmpty()) {
-            System.out.println("No matchning transactions found");
+            System.out.println("No matchning transactions was found");
         }
         else {
             matchingTransactions.forEach(t-> System.out.println(t));

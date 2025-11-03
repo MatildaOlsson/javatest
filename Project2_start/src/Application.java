@@ -1,5 +1,5 @@
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Scanner;
 
 public class Application {
@@ -16,16 +16,20 @@ public class Application {
     protected FilterHistoryCommand filterHistoryCommand;
 
 
+
     public void start() {
         System.out.println("Enter name:");
         nameInput = Main.input.nextLine();
         System.out.println("Enter currency: ");
         currencyInput = Main.input.nextLine();
+        File userFile = TransactionRepository.createNewFileAndReturnName(nameInput);
+
         System.out.println("Welcome to your personal-finance-application, " + nameInput + "!");
 
-        user = new User(nameInput, currencyInput, transactionsList);
-        incomeRegistrationCommand = new RegisterTransactionCommand(user.name, "income", currencyInput, 0, user.transactions);
-        expenseRegistrationCommand = new RegisterTransactionCommand(user.name, "expense", currencyInput, 0, user.transactions);
+
+        user = new User(nameInput, currencyInput, transactionsList, userFile);
+        incomeRegistrationCommand = new RegisterTransactionCommand(user.name, userFile.getName(), "income", currencyInput, 0, user.transactions);
+        expenseRegistrationCommand = new RegisterTransactionCommand(user.name, nameInput + ".txt", "expense", currencyInput, 0, user.transactions);
         deleteTransactionCommand = new DeleteTransactionCommand(user.name, currencyInput, user.transactions);
         viewAccountBalanceCommand = new ViewAccountBalanceCommand(user.name, transactionsList);
         viewHistoryCommand = new ViewHistoryCommand("history", user.transactions);
@@ -55,7 +59,7 @@ public class Application {
                 case 6: filterHistoryCommand.execute();
                 break;
                 case 7:
-                    System.out.println("Application wil close");
+                    System.out.println("Application will close");
                 return;
 
 

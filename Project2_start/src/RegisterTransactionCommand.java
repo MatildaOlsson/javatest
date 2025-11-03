@@ -1,10 +1,9 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.time.LocalDate;
-import java.util.concurrent.TransferQueue;
 
 public class RegisterTransactionCommand extends Command {
     protected ArrayList<Transactions> transactionList;
+    protected String fileName;
     protected double sum;
     protected String type;
     protected String currency;
@@ -15,8 +14,9 @@ public class RegisterTransactionCommand extends Command {
     protected int year = today.getYear();
     protected String week;
 
-    public RegisterTransactionCommand(String name, String type, String currency, double sum, ArrayList<Transactions> transactionlist) {
+    public RegisterTransactionCommand(String name, String fileName, String type, String currency, double sum, ArrayList<Transactions> transactionlist) {
         super(name);
+        this.fileName = fileName;
         this.type = type;
         this.sum = sum;
         this.currency = currency;
@@ -26,7 +26,7 @@ public class RegisterTransactionCommand extends Command {
     @Override
     public void execute() {
         sum = registerSum(type);
-        saveTransactionToArrayList(sum); // Dessa bör kanske bakas ihop??
+        saveTransactionToArrayList(sum, fileName); // Dessa bör kanske bakas ihop??
     }
 
     protected double registerSum(String type) {
@@ -39,7 +39,7 @@ public class RegisterTransactionCommand extends Command {
         return sum;
     }
 
-    protected void saveTransactionToArrayList(double sum){
+    protected void saveTransactionToArrayList(double sum, String fileName) {
             Main.input.nextLine();
             System.out.println("Do you want to add the transaction on today's date?");
             String choice = Main.input.nextLine();
@@ -49,6 +49,7 @@ public class RegisterTransactionCommand extends Command {
                 transactions.setSum(sum);
                 printTransaction(transactions);
                 transactionList.add(transactions);
+                TransactionRepository.saveToFile(transactions, fileName);
             } else {
                 String monthString = getStringFormatOfDateValue(month);
                 String dayString = getStringFormatOfDateValue(day);
@@ -62,8 +63,10 @@ public class RegisterTransactionCommand extends Command {
                 Transactions transactions = new Transactions(sum, type, currency, year, monthString, dayString, week);
                 printTransaction(transactions);
                 transactionList.add(transactions);
+                TransactionRepository.saveToFile(transactions, fileName);
             }
-        }
+
+    }
 
     protected Transactions setOwnDateOnTransaction() {
         System.out.println("Type year, format xxxx");
