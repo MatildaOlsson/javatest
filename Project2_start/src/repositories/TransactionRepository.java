@@ -1,27 +1,23 @@
-import javax.imageio.IIOException;
+package repositories;
+
+import models.Transactions;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class TransactionRepository {
-//    protected String userFileName;
 
-//    TransactionRepository(String userFileName) {
-//        this.userFileName = userFileName;
-//    }
-
-
-    public static File createNewFileAndReturnName(String fileName) {
+    public static File createNewFile(String fileName) {
         File userFile = new File(fileName + ".txt");
 
         try {
             if (userFile.createNewFile()) {
-                System.out.println("New file was created: " + userFile.getAbsolutePath());
+                System.out.println("New user and file was created: " + userFile.getAbsolutePath());
             } else {
-                System.out.println("The file, already exists" + userFile.getAbsolutePath());
+                System.out.println("The user and file: " + fileName + ", already exists. File: " + userFile.getAbsolutePath());
             }
             return userFile;
 
@@ -31,9 +27,7 @@ public class TransactionRepository {
         }
     }
 
-
-
-public static void saveToFile(Transactions transaction, String fileName) {
+    public static void saveToFile(Transactions transaction, String fileName) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
         String sum = transaction.getSum() + "";
         String year = transaction.getYear() + "";
@@ -59,10 +53,6 @@ public static void saveToFile(Transactions transaction, String fileName) {
     } catch (IOException e) {
         System.out.println("Transaction was not able to be saved to file");
         e.printStackTrace();
-
     }
 }
-
-
-
 }

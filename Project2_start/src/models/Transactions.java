@@ -1,19 +1,16 @@
-import java.time.LocalDate;
-import java.util.UUID;
+package models;
 
 public class Transactions {
-    protected UUID id;
     protected double sum;
     protected String type;
     protected String currency;
 
     protected String day;
     protected String month;
-    protected int year;
+    protected String year;
     protected String week;
 
-    Transactions(double sum, String type, String currency, int year, String month, String day, String week) {
-        this.id = UUID.randomUUID();
+    public Transactions(double sum, String type, String currency, String year, String month, String day, String week) {
         this.sum = sum;
         this.type = type;
         this.currency = currency;
@@ -23,33 +20,16 @@ public class Transactions {
         this.week = week;
     }
 
-
     public void setSum(double sum) {
         this.sum = sum;
-
     }
-
-    public void setDay(String day) {
-        this.day = day;
-
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
     public double getSum() {
         return sum;
     }
     public String getDay() {
         return day;
     }
-    public int getYear(){
+    public String getYear(){
         return year;
     }
     public String getMonth() {
@@ -57,9 +37,6 @@ public class Transactions {
     }
     public String getWeek() {
         return week;
-    }
-    public UUID getId() {
-        return id;
     }
     public String getCurrency() {
         return currency;

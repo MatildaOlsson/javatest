@@ -1,11 +1,15 @@
+package commands;
+
+import models.Transactions;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewAccountBalanceCommand extends Command {
     protected ArrayList<Transactions> transactionList;
 
-    ViewAccountBalanceCommand(String name, ArrayList<Transactions> transactionList) {
-        super(name);
+    public ViewAccountBalanceCommand(ArrayList<Transactions> transactionList) {
+        super("View account balance");
         this.transactionList = transactionList;
     }
 

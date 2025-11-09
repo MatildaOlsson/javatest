@@ -1,3 +1,4 @@
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +22,18 @@ public class Main {
 
 
 
+}
+
+
+public void test (Object className) {
+Class<?> clazz = className.getClass();
+Method
+Method[] methods = clazz.isAnnotationPresent("Autocall");
+    for (int i = 0; i < methods.length; i++) {
 
     }
+
+
+
+}
 }

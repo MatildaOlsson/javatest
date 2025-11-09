@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/StreamsAndLambdas.iml" filepath="$PROJECT_DIR$/StreamsAndLambdas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Refelction.iml" filepath="$PROJECT_DIR$/Refelction.iml" />
     </modules>
   </component>
 </project>

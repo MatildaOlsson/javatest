@@ -1,10 +1,14 @@
+package commands;
+
+import models.Transactions;
+
 import java.util.ArrayList;
 
 public class ViewHistoryCommand extends Command {
     ArrayList<Transactions> transactionList = new ArrayList<>();
 
-    ViewHistoryCommand(String name, ArrayList<Transactions> transactionList) {
-        super(name);
+    public ViewHistoryCommand(ArrayList<Transactions> transactionList) {
+        super("See all transactions");
         this.transactionList = transactionList;
     }
 

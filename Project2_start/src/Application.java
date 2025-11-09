@@ -1,69 +1,79 @@
+import commands.*;
+import models.Transactions;
+import models.User;
+import services.*;
+import utils.*;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.InputMismatchException;
+
 
 public class Application {
-    protected String nameInput = null;
-    protected String currencyInput = null;
-    protected ArrayList<Transactions> transactionsList = new ArrayList<>();
+    TerminalCommandService terminalCommandService = new TerminalCommandService();
+    ReadTerminalInput input = new ReadTerminalInput();
 
-    protected User user;
-    protected RegisterTransactionCommand incomeRegistrationCommand;
-    protected RegisterTransactionCommand expenseRegistrationCommand;
-    protected DeleteTransactionCommand deleteTransactionCommand;
-    protected ViewAccountBalanceCommand viewAccountBalanceCommand;
-    protected ViewHistoryCommand viewHistoryCommand;
-    protected FilterHistoryCommand filterHistoryCommand;
-
-
+    String nameInput = "";
+    String currencyInput = "";
+    ArrayList<Transactions> transactions = new ArrayList<>();
+    ArrayList<Command> commandoList = terminalCommandService.getListOfCommands();
 
     public void start() {
-        System.out.println("Enter name:");
-        nameInput = Main.input.nextLine();
-        System.out.println("Enter currency: ");
-        currencyInput = Main.input.nextLine();
-        File userFile = TransactionRepository.createNewFileAndReturnName(nameInput);
 
-        System.out.println("Welcome to your personal-finance-application, " + nameInput + "!");
+        User user = creatUser(transactions);
 
-
-        user = new User(nameInput, currencyInput, transactionsList, userFile);
-        incomeRegistrationCommand = new RegisterTransactionCommand(user.name, userFile.getName(), "income", currencyInput, 0, user.transactions);
-        expenseRegistrationCommand = new RegisterTransactionCommand(user.name, nameInput + ".txt", "expense", currencyInput, 0, user.transactions);
-        deleteTransactionCommand = new DeleteTransactionCommand(user.name, currencyInput, user.transactions);
-        viewAccountBalanceCommand = new ViewAccountBalanceCommand(user.name, transactionsList);
-        viewHistoryCommand = new ViewHistoryCommand("history", user.transactions);
-        filterHistoryCommand = new FilterHistoryCommand("filterHistory", user.transactions);
-
+        terminalCommandService.registerCommand(new RegisterTransactionCommand(user.getUserFile(), "Income", currencyInput, user.getTransactions()));
+        terminalCommandService.registerCommand(new RegisterTransactionCommand(user.getUserFile(), "Expense", currencyInput, user.getTransactions()));
+        terminalCommandService.registerCommand(new DeleteTransactionCommand(currencyInput, user.getTransactions()));
+        terminalCommandService.registerCommand(new ViewAccountBalanceCommand(user.getTransactions()));
+        terminalCommandService.registerCommand(new ViewHistoryCommand(user.getTransactions()));
+        terminalCommandService.registerCommand(new FilterHistoryCommand(user.getTransactions()));
 
         while (true) {
             System.out.println("====YOUR PERSONAL-FINANCE-APPLICATION====");
-            System.out.println("Make one of following choice:");
-            System.out.println(" 1. Register income \n 2. Register expense \n 3. Delete transaction \n 4. View current account balance \n 5. View transaction history \n 6. Filter transaction history \n 7. Exit");
-            Scanner input = new Scanner(System.in);  // TODO Snyggare commandomany, se WIlliams project?
-            System.out.println("Enter your choice:");
+            System.out.println("Choice one of following commands:");
+            //Kommandomenyn printas ut
+            int i = 1;
+            for (Command c : commandoList) {
+                System.out.println(i + ". " + c.getName());
+                i += 1;
+            }
+            System.out.println("7. Quit application");
 
-            int commandChoice = input.nextInt();
+            try {
+                int choice = input.intInput();
 
-            switch (commandChoice) {
-                case 1: incomeRegistrationCommand.execute();
-                break;
-                case 2: expenseRegistrationCommand.execute();
-                break;
-                case 3: deleteTransactionCommand.execute();
-                break;
-                case 4: viewAccountBalanceCommand.execute();
-                break;
-                case 5: viewHistoryCommand.execute();
-                break;
-                case 6: filterHistoryCommand.execute();
-                break;
-                case 7:
-                    System.out.println("Application will close");
+                if (choice == 7)
+                    return;
+                else {
+                    int index = choice - 1;
+                    terminalCommandService.executeCommand(index, commandoList);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Wrong input. Try again using a number");
+            } catch (Exception e) {
+                System.out.println(e);
                 return;
-
-
             }
         }
+    }
+
+    protected User creatUser(ArrayList<Transactions> transactionList) {
+        System.out.println("Enter name:");
+        try {
+            nameInput = input.stringInput();
+        } catch (Exception e) {
+            System.out.println("Something went wrong. Enter a name using letters");
+        }
+        System.out.println("Enter currency: ");
+        try {
+            currencyInput = input.stringInput();
+        } catch (Exception e) {
+            System.out.println("Something went wrong. Enter your currency");
+        }
+
+        File userFile = repositories.TransactionRepository.createNewFile(nameInput);
+        User user = new User(nameInput, currencyInput, transactionList, userFile);
+        return user;
     }
 }

@@ -1,6 +1,0 @@
-Amount: 283.0 Snigeldollar
-Date: 2025-11-03
---------
-Amount: -920.0 Snigeldollar
-Date: 2025-11-03
---------

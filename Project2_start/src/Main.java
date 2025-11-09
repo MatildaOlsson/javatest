@@ -1,13 +1,20 @@
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.function.Predicate;
+
+import commands.*;
+import models.Transactions;
+import models.User;
+import services.TerminalCommandService;
+import utils.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static final Scanner input = new Scanner(System.in);
+
 
     public static void main(String[] args) {
-        Application application = new Application();
-        application.start();
+        Application financeApp = new Application();
+        financeApp.start();
     }
 }
